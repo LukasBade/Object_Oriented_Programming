@@ -4,6 +4,10 @@
 
 using namespace std;
 
+
+//ToDo: Namespaces aufräumen und vor Abnahme anpassen, bessere Schleifen auswählen
+
+
 // Aufzählungstyp für wählbare Objekte
 // STEIN - 0, SCHERE - 1, PAPIER - 2
 enum class Object
@@ -35,7 +39,7 @@ struct Player
 string insert_name()
 {
     //Aus der Foliensammlung, Liest eine Zeile *ganz* als String ein
-    cout << "Bitte geben Sie Ihren Namen ein: " << endl;
+    cout << "Name des Spielers: " ;
     string sName;
     getline(cin, sName);
     return sName;
@@ -87,6 +91,19 @@ string get_name(Object object)
     // Abhängig vom vorliegenden Objekt einen entsprechenden String zurückgeben.
     // z.B: Wenn object dem Wert Object::ROCK entspricht, dann String "Stein" zurückgeben
 
+    //Idee: Switch Case mit den einzelnen Objekten als sofortige Rückgabewert
+    switch (object)
+    {
+        case Object::ROCK:
+            return "Stein";
+        case Object::SCISSORS:
+            return "Schere";
+        case Object::PAPER:
+            return "Papier";
+    }
+
+    return "Invalide Auswahl"; //An sich doppelt gemoppelt durch den switch case und die do while schleife welche bei falscher eingabe weiter fragt, aber nötig um eine fehlermeldung zu vermeiden
+
 }
 
 // Einen Text mit dem Namen des Spielers und seiner Wahl ausgeben
@@ -97,6 +114,9 @@ void print_choice(Player player)
     // Auf der Konsole ausgeben, für welches Objekt sich der Spieler entschieden hat.
     // z.B.: "Computer hat das Objekt Schere gewählt"
     // TIP: Nutzen sie hierzu die Funktion get_name
+
+    //get_name gibt name des objektes zurück, beides kommt aus der struct
+    cout << player.name << " hat das Objekt " << get_name(player.choice) << " gewählt" << endl;
 
 }
 
@@ -109,7 +129,28 @@ Object choose()
     // Stellen sie sicher, dass es sich um eine gültige Wahl handelt!
     // TIP: Nutzen Sie dazu eine geeignete Schleife. Siehe auch Vorlesung Folie "Annehmende Schleifenanweisungen – Do"
 
+    //do while da man auf eine richtige eingabe wartet btw iteriert
+
+    int input; //Input variable gültigkeit in der schleife 
+
+    do
+    {
+        cout << "Bitte Objektwahl eingeben (1 = Stein, 2 = Schere, 3 = Papier): ";
+        
+        if (cin >> input) 
+        {
+            // Bereich 1-3
+            if (input >= 1 && input <= 3) 
+            {
+                // Struct - 1 
+                return static_cast<Object>(input - 1);
+            }
+        }
+
+
+    } while (true);
 }
+
 
 Result determine_result(Player player_1, Player player_2)
 {
@@ -118,6 +159,26 @@ Result determine_result(Player player_1, Player player_2)
     // Vergleichen Sie die gewählten Objekte, ermitteln sie das Spielergebnis und geben sie es zurück.
     // TIP: Wenn Sie für den Vergleich mit ganzene Zahlen _rechnen_ wollen, dann nutzen sie den static_cast, siehe auch Vorlesung Folie "Casts in C++: Static_cast"
 
+    //Stein 0, Scheere 1, Papier 2
+    //Lösung mit static cast bzw numbers
+    int choice_1 = static_cast<int>(player_1.choice);
+    int choice_2 = static_cast<int>(player_2.choice);
+
+    if (choice_1 == choice_2)
+    {
+        return Result::DRAW;
+    }
+    else if ((choice_1 == 0 && choice_2 == 1) || (choice_1 == 1 && choice_2 == 2) || (choice_1 == 2 && choice_2 == 0))
+    {
+        return Result::PLAYER_ONE_WINS;
+    }
+    else
+    {
+        return Result::PLAYER_TWO_WINS;
+    }
+
+
+    //Frage; Lösung nicht besser ohne Berechnunge durch kleinen Vergleich der Inpute direkt mit if else und || statements?
 }
 
 void print_result(Player player_1, Player player_2)
@@ -127,6 +188,21 @@ void print_result(Player player_1, Player player_2)
     // Ermitteln Sie zunächst das Spielergebnis. Nutzen sie dazu die Funktion determine_result.
     // Geben Sie anschließend auf der Konsole aus, wer gewonnen hat.
     // z.B: "Spieler Computer hat gewonnen" oder "Unentschieden"
+
+    // print result via cout -> viele möglichkeiten = switch case oder else if - was ist truly besser in c++?
+    Result result = determine_result(player_1, player_2);
+    switch (result)
+    {
+    case Result::DRAW:
+        cout << "Unentschieden" << endl;
+        break;
+    case Result::PLAYER_ONE_WINS:
+        cout << "Spieler " << player_1.name << " hat gewonnen." << endl;
+        break;
+    case Result::PLAYER_TWO_WINS:
+        cout << "Spieler " << player_2.name << " hat gewonnen." << endl;
+        break;
+    }
 
 }
 
