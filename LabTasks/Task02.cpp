@@ -29,29 +29,18 @@ struct Player
 };
 
 // Name des Spielers eingeben
-string insert_name()
-{
-
-    // HIER programmieren:
+// HIER programmieren:
     // Den Namen des Spielers von der Konsole einlesen und zurückgeben
     // Tip: für das Einlesen eines Strings gibt es eine bestimmte Funktion, siehe auch Vorlesung Folie "Eine Zeile als String einlesen"
-
-    string read_row_as_string() 
-    {
-
-
-        string str;
-
-        cout << "Bitte einen String (getline)" << endl;
-
-        cin.clear();
-
-        getline(cin, str); // liest bis \n kommt
-
-        return str;
-
-    }
+string insert_name()
+{
+    //Aus der Foliensammlung, Liest eine Zeile *ganz* als String ein
+    cout << "Bitte geben Sie Ihren Namen ein: " << endl;
+    string sName;
+    getline(cin, sName);
+    return sName;
 }
+
 
 Object determine_choice(string choice)
 {
@@ -73,9 +62,16 @@ Object determine_choice(string choice)
 
         // HIER beantworten Sie folgende Fragen:
         // Was bewirkt die funktion srand?
+        // Die Fuktion srand ist im Ganzen der Zufallsgenerator.
+
         // Warum wird hier die Zeit (time) als Eingabe für die Funktion srand verwendet?
+        // Die Zeit ist ein nicht fixer Wert welcher "immer" anders ist. 
+
         // Wie funktioniert die funktion rand?
+        // Es erzeugt einen Nullpointer auf einen zufälligen Wert durch die Zeit und Modulo 3. Diesert Wert wird als Objekt geschrieben.
+        
         // Warum wird hier modulo 3 verwendet?
+        // 3 "Ergebnisse" als bruachen wir Modulo 3 für Rest 0, 1 und 2.
 
         srand(static_cast<int>(time(nullptr)));
         int choice = rand() % 3;
