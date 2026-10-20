@@ -10,6 +10,9 @@ struct ListElement
     ListElement* p_next;
 };
 //frage; warum nicht direct im struct mit dabei? 
+
+//Startpointer für erstes Listenelement
+
 ListElement* p_root = nullptr;
 
 void add_new_head_element(int id)
@@ -24,12 +27,15 @@ void add_new_head_element(int id)
 void add_new_tail_element(int id)
 {
     ListElement* p_new_element = new ListElement();
-p_new_element->id = id;
+
+    p_new_element->id = id;
     p_new_element->p_next = nullptr;
 
     //läuft ans ende der liste wegen nullptr
     if (p_root == nullptr)
     {
+
+        //Auch add_new_head_element nutzbar
         p_root = p_new_element;
     }
     else

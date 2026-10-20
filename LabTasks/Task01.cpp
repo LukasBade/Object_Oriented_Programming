@@ -7,7 +7,6 @@ using namespace std;
 
 //ToDo: Namespaces aufräumen und vor Abnahme anpassen, bessere Schleifen auswählen
 
-
 // Aufzählungstyp für wählbare Objekte
 // STEIN - 0, SCHERE - 1, PAPIER - 2
 enum class Object
@@ -77,6 +76,8 @@ Object determine_choice(string choice)
         // Warum wird hier modulo 3 verwendet?
         // 3 "Ergebnisse" als bruachen wir Modulo 3 für Rest 0, 1 und 2.
 
+
+        //s for seed
         srand(static_cast<int>(time(nullptr)));
         int choice = rand() % 3;
         return static_cast<Object>(choice);
