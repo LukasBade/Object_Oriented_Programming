@@ -139,10 +139,10 @@ Object choose()
         
         if (cin >> input) 
         {
-            // Bereich 1-3
+            // Bereich 1-3 erlaubt 
             if (input >= 1 && input <= 3) 
             {
-                // Struct - 1 
+                // Struct - 1 und Umwandlung mit stattic_cast in Object
                 return static_cast<Object>(input - 1);
             }
         }
@@ -164,6 +164,7 @@ Result determine_result(Player player_1, Player player_2)
     int choice_1 = static_cast<int>(player_1.choice);
     int choice_2 = static_cast<int>(player_2.choice);
 
+    //mögliche lösungen 
     if (choice_1 == choice_2)
     {
         return Result::DRAW;
@@ -191,10 +192,12 @@ void print_result(Player player_1, Player player_2)
 
     // print result via cout -> viele möglichkeiten = switch case oder else if - was ist truly besser in c++?
     Result result = determine_result(player_1, player_2);
+    //springt zum passenden case 
     switch (result)
     {
     case Result::DRAW:
         cout << "Unentschieden" << endl;
+        //break damit kein "fallthrough" passiert - also mehrere cases als output
         break;
     case Result::PLAYER_ONE_WINS:
         cout << "Spieler " << player_1.name << " hat gewonnen." << endl;

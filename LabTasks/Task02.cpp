@@ -3,16 +3,18 @@
 #include <iostream>
 using namespace std;
 
+//elemente speichern wert und zeiger auf nächsten wert -> verkettete liste 
 struct ListElement
 {
     int id;
     ListElement* p_next;
 };
-
+//frage; warum nicht direct im struct mit dabei? 
 ListElement* p_root = nullptr;
 
 void add_new_head_element(int id)
 {
+    //reihenfolge wichtig, erst neuen knoten, dann pp_root 
     ListElement* p_new_element = new ListElement();
     p_new_element->id = id;
     p_new_element->p_next = p_root;
@@ -25,6 +27,7 @@ void add_new_tail_element(int id)
 p_new_element->id = id;
     p_new_element->p_next = nullptr;
 
+    //läuft ans ende der liste wegen nullptr
     if (p_root == nullptr)
     {
         p_root = p_new_element;
@@ -39,13 +42,14 @@ p_new_element->id = id;
         p_tmp->p_next = p_new_element;
     }
 }
-
+// "->" operator wegweisungsoperator
 
 void delete_element(int id)
 {
     ListElement *p_tmp = p_root;
     ListElement *p_predecessor = nullptr;
 
+    //es wird nach der id gesucht 
     while (p_tmp != nullptr && p_tmp->id != id)
     {
         p_predecessor = p_tmp;
@@ -70,6 +74,8 @@ void print_list()
     // Hier programmieren:
     // Die Liste durchlaufen und jeweils die id des listenElements ausgeben.
     ListElement* p_tmp = p_root;
+    //muss man ListElement* machen? was wenn ich jeden mal p_tmp oben initialisier? 
+    // läuft durch bis temp beim nullptr ist 
     while (p_tmp != nullptr)
     {
         std::cout << p_tmp->id << std::endl;

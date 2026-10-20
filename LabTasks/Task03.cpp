@@ -1,9 +1,11 @@
 #include <iostream>
 
 // Funktion mit einem Default-Parameter für die Breite
-void print_rectangle(int height, int width = -1) {
+//width 0 als default wert falls kein zwetier parameter übvergeben wiord
+//-1 als defautl wert möglich um failsave falls width = height nicht funktiuoniert
+void print_rectangle(int height, int width = 0) {
     // Wenn kein zweiter Parameter übergeben wurde, ist es ein Quadrat
-    if (width == -1) {
+    if (width == 0) {
         width = height;
     }
 
