@@ -3,6 +3,7 @@
 // Funktion mit einem Default-Parameter für die Breite
 //width 0 als default wert falls kein zwetier parameter übvergeben wiord
 //-1 als defautl wert möglich um failsave falls width = height nicht funktiuoniert
+//Negativ Wert geschickter
 void print_rectangle(int height, int width = 0) {
     // Wenn kein zweiter Parameter übergeben wurde, ist es ein Quadrat
     if (width == 0) {
