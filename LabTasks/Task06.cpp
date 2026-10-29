@@ -2,8 +2,26 @@
 #include <iostream>
 using namespace std;
 
-//Bauplan für Objekte "Klasse"
+//Warum Klassen? -> Kapselung durch private und public
+//Code von außen greift nicht direkt aud sas Attribut zu sondern muss get- oder print- Methoden nutzen
 
+//Konstruktoren und Initialisierungliste
+//Student: ohne Liste - Erst Initialisierung dann Zuweisung -> Kostet Performance
+//Zuweisung im Body, Initialisierung mit ""
+
+
+//Employee: mit Liste - Variablen direkt mit Parametern initialisiert
+//Nicht im Body! Kein "leerer String"
+
+//Warum?
+//-> Performance da weniger Schritte
+//const Werte können nicht erneut zugewiesenm werden
+//Refernzen genauso nur in der Initialisierungsliste möglich
+
+//Konstruktor: Wird dann aufgerufen wenn ein ein Objekt mit der Klasse erstellt wird und füllt Attribute
+//hat KEINEN Rückgabewert und heißt exakt wie die Klasse!
+
+//const wirkt hier als read-only für die objekte welche aus den klassen benutzt/gegetted werden
 
 // Klasse Student
 class Student{
@@ -29,6 +47,8 @@ private:
 };
 
 //Methoden von Student außerhalb
+
+//Konstruktor
 Student::Student(string name, string firstname) {
     // Keine Initialisierungsliste laut Anforderung
     _name = name;
@@ -75,11 +95,16 @@ public:
     }
 
     // Standardkonstruktor (delegiert an den parametrisierten Konstruktor via Initialisierungsliste)
+    //"dont repeat yourself"
     Employee() : Employee("Mustermann", "Erika") {
          cout << "Standardkonstruktor Employee: " << _firstname << " " << _name <<  endl;
     }
 
     // Konvertierungskonstruktor (nutzt Initialisierungsliste und get-Methoden von Student)
+    //Kann Student Objekt in Employee umwandeln indem get verwendet wird
+
+    //explicit -> kann NUR student into employee und nicht einen employee ercheaten
+    //schützt vor ungewollten Konvertierungen weil der konvertierungskonstruktor "richtig handelt"
     Employee(const Student& student) 
         : _name(student.getName()), _firstname(student.getFirstName()) {
          cout << "Konvertierungskonstruktor Employee: " << _firstname << " " << _name <<  endl;
@@ -116,7 +141,7 @@ int main(int argc, char *argv[])
     Student *p_stud_mustermann = nullptr;
     cout << "Block wird betreten" << endl;
     {
-        p_stud_mustermann = new Student("Mustermann", "Markus");
+        p_stud_mustermann = new Student("Mustermann", "Markus"); //Heap? -> deswegen außerhalb scope
         p_stud_mustermann->print(true);
     }
     cout << "Block wurde verlassen" << endl;
