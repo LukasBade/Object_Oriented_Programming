@@ -73,7 +73,7 @@ class Circle{
 
    void print(bool endLine = true) const {
         cout << "[";
-     _centre.print(false); // false, damit kein Zeilenumbruch nach dem Punkt kommt
+     _centre.print(false); // false, damit kein Zeilenumbruch nach dem Punkt kommt 
         cout << ", " << _radius << "]";
         if (endLine) {
             cout << endl;

@@ -35,6 +35,7 @@ private:
     public:
     // Prototypen (Implementierung erfolgt außerhalb)
     Student(string name, string first_name);
+    
     ~Student();
     
     string getName() const;

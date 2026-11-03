@@ -5,6 +5,8 @@ using namespace std;
 //gehört zur Klasse, nicht einem Objekt
 //geteiltes Attribut!
 
+//Dekonstruktor manuell aufgerufen obwohl er automatisch aufgerufen wird
+
 
 // Klasse Customer definieren
 class Customer{
