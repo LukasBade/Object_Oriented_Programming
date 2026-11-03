@@ -42,6 +42,7 @@ class Point{
 
 };
 
+//Aggregation und Komposition - k wie komplette abhängigkeit
 class Circle{
 
     Point _centre;
