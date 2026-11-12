@@ -6,10 +6,29 @@ class Date {
 	int _day, _month, _year;
 
 public:
-	Date(int = 0, int = 0, int = 0);
-	Date operator+(int days);
-	friend ostream & operator<<(ostream &, const Date &);
+	Date(int day = 0, int month = 0, int year = 0)
+        :_day(day), _month(month), _year(year) {} //Liste
+
+	Date operator+(int count) const {
+        // Datum in absolute Tage umrechnen (-1, da bei 1 basierend gestartet wird)
+        int total_days = (_year - 1) * 360 + (_month - 1) * 30 + (_day - 1) + count;
+        
+        // Wieder zurückrechnen in Jahr, Monat und Tag
+        int y = total_days / 360;
+        int rem = total_days % 360;
+        int m = rem / 30;
+        int d = rem % 30;
+        
+        return Date(d + 1, m + 1, y + 1);
+    }
+    
+    // Ausgabeoperator für cout
+    friend ostream & operator<<(ostream & os, const Date & dt) {
+        os << dt._day << "." << dt._month << "." << dt._year;
+        return os;
+    }
 };
+
 
 
 int main(int argc, char *argv[])
