@@ -8,15 +8,19 @@ using namespace std;
 
 // Klasse für alle Personen, die Medien leihen können aus Aufgabe 10
 class Person {
+    //membervariablen
 	string _name;
 	int _check_out_duration;
+    
 public:
+// Konstruktor =0 und Memberfkt deklarieren
 	Person(string name, int check_out_duration = 0);
 	int get_check_out_duration() const;
     string get_name() const;
 	void print() const;
 };
 
+//Konstruktor, ":" leitet Initialisierungsliste ein 
 Person::Person(string name, int check_out_duration)
 	:_name(name)
 	, _check_out_duration(check_out_duration)
@@ -36,7 +40,10 @@ void Person::print() const
 {
 	cout << _name;
 }
+//ENDE KLASSE PERSON
 
+
+//KLasse für Profs, vererbung von person
 class Lecturer : public Person
 {
 	int _examiner_id;
@@ -56,7 +63,9 @@ void Lecturer::print() const
 	Person::print();
 	cout << ", _examiner_id " << _examiner_id << endl;
 }
+//ENDE KLASSSE LECT
 
+//Klasse student, erbt von person
 class Student : public Person
 {
 	int _matriculation_number;
@@ -78,6 +87,10 @@ void Student::print() const
 	Person::print();
 	cout << ", Matrikelnummer " << _matriculation_number << endl;
 }
+//ENDE KLASSE STIDENT
+
+
+
 
 // Klasse Datum aus Aufgabe 9
 class Date {
@@ -92,8 +105,11 @@ public:
     // ** neu **
     // Konvertierkonstruktor für C-String neu
     Date(const char *);
+
+
 	Date operator+(int days);
 	friend ostream & operator<<(ostream &, const Date &);
+    //friend erkaubt zugriff auf die membervariablen trotz private!
 };
 
 
@@ -103,8 +119,27 @@ Date::Date(int d, int m, int y)
 }
 
 // hier Konvertierkonstruktor für String
+#include <sstream> // für std::istringstream
+
+Date::Date(const string &s)
+    : _day(), _month(), _year() 
+{
+    std::istringstream iss(s);
+    char dot1 = 0, dot2 = 0;
+
+    //"26.11.2026"
+    if (!(iss >> _day >> dot1 >> _month >> dot2 >> _year) || dot1 != '.' || dot2 != '.') {
+        _day = 0;
+        _month = 0;
+        _year = 0;
+    }
+}
 
 // hier Konvertierkonstruktor für C-String
+Date::Date(const char *s)
+    : Date(string(s)) // delegiert an Date(const string &)
+{
+}
 
 Date Date::operator+(int days)
 {
@@ -161,6 +196,47 @@ public:
 };
 
 // hier Konstruktor und Methoden
+Medium::Medium(string title, string publisher, int year_of_publication)
+    : _title(title)
+    , _publisher(publisher)
+    , _year_of_publication(year_of_publication)
+    , _date_of_check_out()       // nutzt Date-Defaultkonstruktor (0, 0, 0)
+    , _date_of_return()          // nutzt Date-Defaultkonstruktor (0, 0, 0)
+    , _lender(nullptr)           // anfangs kein Ausleiher
+{
+}
+
+string Medium::get_title() const
+{
+    return _title;
+}
+Person *Medium::get_lender() const
+{
+    return _lender;
+}
+
+void Medium::print() const
+{
+    cout << "Titel: " << _title
+         << ", Verlag: " << _publisher
+         << ", Jahr: " << _year_of_publication;
+
+    if (_lender != nullptr) {
+        cout << ", Ausleiher: " << _lender->get_name()
+             << ", Dauer: " << _lender->get_check_out_duration();
+    } else {
+        cout << ", nicht ausgeliehen";
+    }
+    cout << endl;
+}
+
+
+Medium *Medium::clone() const
+{
+    return new Medium(*this);
+}
+
+
 
 // Klasse für die Bücher als Spezialisierung von Medium
 class Book : public Medium
@@ -177,6 +253,12 @@ public:
 };
 
 // hier Konstruktor und Methoden
+Book::Book(string author, string title, string publisher, int year_of_publication)
+    : Medium(title, publisher, year_of_publication)
+    , _author(author)
+{
+}
+
 
 // Klasse für die DVDs als Spezialisierung von Medium
 class DVD : public Medium
