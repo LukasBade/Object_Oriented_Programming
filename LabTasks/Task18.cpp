@@ -183,7 +183,6 @@ protected:
 public:
     // Konstruktor
     Medium(string title = "", string publisher = "", int year_of_publication = 0);
-    virtual ~Medium();
     // Titel zurückliefern
     string get_title() const;
     // Ausleiher zurückliefern
@@ -200,12 +199,17 @@ Medium::Medium(string title, string publisher, int year_of_publication)
     : _title(title)
     , _publisher(publisher)
     , _year_of_publication(year_of_publication)
-    , _date_of_check_out()       // nutzt Date-Defaultkonstruktor (0, 0, 0)
-    , _date_of_return()          // nutzt Date-Defaultkonstruktor (0, 0, 0)
-    , _lender(nullptr)           // anfangs kein Ausleiher
+    , _date_of_check_out()       //nutzt Date-Defaultkonstruktor (0, 0, 0)
+    , _date_of_return()          //nutzt Date-Defaultkonstruktor (0, 0, 0)
+    , _lender(nullptr)           //anfangs kein Ausleiher
 {
 }
-
+void Medium::check_out(Person &p, Date date_of_check_out, Date date_of_return)
+{
+    _lender = &p;
+    _date_of_check_out = date_of_check_out;
+    _date_of_return = date_of_return;
+}
 string Medium::get_title() const
 {
     return _title;
@@ -225,7 +229,7 @@ void Medium::print() const
         cout << ", Ausleiher: " << _lender->get_name()
              << ", Dauer: " << _lender->get_check_out_duration();
     } else {
-        cout << ", nicht ausgeliehen";
+        cout << "-";
     }
     cout << endl;
 }
@@ -259,6 +263,17 @@ Book::Book(string author, string title, string publisher, int year_of_publicatio
 {
 }
 
+Medium *Book::clone() const
+{
+    return new Book(*this);
+}
+
+void Book::print() const
+{
+    cout << "Autor: " << _author << ", ";
+    Medium::print();
+}
+
 
 // Klasse für die DVDs als Spezialisierung von Medium
 class DVD : public Medium
@@ -276,6 +291,22 @@ public:
 };
 
 // hier Konstruktor und Methoden
+DVD::DVD(string title, string publisher, int year_of_publication, int play_time)
+    : Medium(title, publisher, year_of_publication)
+    , _c_play_time(play_time)
+{
+}
+
+void DVD::print() const
+{
+    cout << "Abspieldauer: " << _c_play_time << " Minuten, ";
+    Medium::print();
+}
+
+Medium *DVD::clone() const
+{
+    return new DVD(*this);
+}
 
 // Die Klasse Library verweist auf alle Medien (Bücher und DVDs),
 // die von Personen (Studierende und Dozenten) ausgeliehen werden
@@ -308,6 +339,50 @@ public:
 };
 
 // hier Konstruktor und Methoden
+Library::Library(int maximal_number_of_media)
+    : _c_maximal_number_of_media(maximal_number_of_media)
+{
+}
+
+void Library::procure_medium(Medium &m)
+{
+    if (media.size() < _c_maximal_number_of_media) {
+        media.push_back(m.clone());
+    } else {
+        cout << "Maximale Anzahl an Medien" << endl;
+    }
+}
+
+void Library::search_medium(string search_word){
+
+    cout << "Suchergebnis für \"" << search_word << "\":" << endl;
+    for (size_t i = 0; i < media.size(); ++i) {
+        if (media[i]->get_title().find(search_word) != string::npos) { //string no-position
+            cout << "Nummer: " << i + 1 << ", ";
+            media[i]->print();
+        }
+    }
+}
+
+void Library::check_out_medium(int number, Person &p, Date d)
+{
+    if (number > 0 && static_cast<size_t>(number) <= media.size()) {
+        Medium *m = media[number - 1];
+        m->check_out(p, d, d + p.get_check_out_duration()); //Check Out Methode von medium aufurfen
+    } else {
+        cout << "Ungültiges Medium" << endl;
+    }
+}
+
+void Library::print() const
+{
+    cout << "Bibliotheksbestand:" << endl;
+    for (size_t i = 0; i < media.size(); ++i) {
+        cout << "Nummer: " << i + 1 << ", ";
+        media[i]->print();
+    }
+}
+
 
 int main(int argc, char *argv[]) 
 {
